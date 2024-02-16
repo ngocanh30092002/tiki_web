@@ -18,7 +18,7 @@ const Products = (props) => {
   return (
     <>
       <div className= {props.className}>
-        <div className="list-products-wrapper grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-y-[10px] gap-x-[8px] px-[10px]">
+        <div className="list-products-wrapper grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-y-[10px] gap-x-[8px] px-[10px]">
           {products.map(product =>{
             return <ProductItem key={product.id} data = {product}/>
           })}

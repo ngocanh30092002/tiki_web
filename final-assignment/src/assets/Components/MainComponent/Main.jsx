@@ -13,9 +13,9 @@ const Main = () => {
 
       <div className='main-content grid grid-cols-12'>
         <ProductFilter className='hidden'/> 
-        <SideBar className='col-span-2'/>
-        <Products className='col-span-10'/>
-        <Paging className='hidden'/>
+        <SideBar className='hidden lg:block lg:col-span-2'/>
+        <Products className='col-span-12 lg:col-span-10'/>
+        <Paging className='hidden md:block lg:block col-span-12 '/>
       </div>
     </div>
   </>

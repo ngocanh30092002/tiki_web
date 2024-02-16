@@ -1,5 +1,10 @@
 .main{
     background-color: #f5f5fa; 
+    overflow: hidden;
+}
+
+.main > *{
+    width: 100%;
 }
 
 .main-nav-path,
@@ -8,5 +13,5 @@
     padding-right: 15px;
     margin-right: auto;
     margin-left: auto;
-    width: 1270px;
+    max-width: 1270px;
 }
