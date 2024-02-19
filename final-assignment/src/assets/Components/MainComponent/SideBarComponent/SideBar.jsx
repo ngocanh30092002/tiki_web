@@ -1,8 +1,10 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import './style.css';
-const SideBar = (props) => {
+import StarRating from '../StarRatingComponent/StarRating';
 
+const SideBar = (props) => {
+  
   const [suppliers , setSuppliers] = useState([]);
 
   useEffect( () => {
@@ -32,10 +34,10 @@ const SideBar = (props) => {
           <div className='sidebar-product-wrapper'>
             <span className='sidebar-item-title'>Danh mục sản phẩm</span>
             <ul>
-              <li><a href='' className = 'sb-product-item'>English Books</a></li>
-              <li><a href='' className = 'sb-product-item'>Sách tiếng Việt</a></li>
-              <li><a href='' className = 'sb-product-item'>Văn phòng phẩm</a></li>
-              <li><a href='' className = 'sb-product-item'>Quà lưu niệm</a></li>
+              <li><a href='' className = 'sb-product-item' onClick={(e) =>{onClickCategorySearch(e)}}>English Books</a></li>
+              <li><a href='' className = 'sb-product-item' onClick={(e) =>{onClickCategorySearch(e)}}>Sách tiếng Việt</a></li>
+              <li><a href='' className = 'sb-product-item' onClick={(e) =>{onClickCategorySearch(e)}}>Văn phòng phẩm</a></li>
+              <li><a href='' className = 'sb-product-item' onClick={(e) =>{onClickCategorySearch(e)}}>Quà lưu niệm</a></li>
             </ul>
           </div>
 
@@ -55,7 +57,11 @@ const SideBar = (props) => {
 
           <div className='sidebar-rating-wrapper'>
             <span className='sidebar-item-title'>Đánh giá</span>
-
+            <div className='flex flex-column gap-[10px] mt-[10px]'>
+              <StarRating ratingNumber = {5} content ='từ 5 sao'/>
+              <StarRating ratingNumber = {4} content ='từ 4 sao'/>
+              <StarRating ratingNumber = {3} content ='từ 3 sao'/>
+            </div>
           </div>
         </div>
 
@@ -72,7 +78,7 @@ return <>
     <ul>
       {listSuppliers.map( (supplier, index) => {
         return <li key = {index} className='flex items-center gap-[10px] mt-[5px]'>
-          <input className='sb-ckb-supplier' type="checkbox" id={"supplier" + index + 1} name= {"supplier" + index + 1} value={supplier}/>
+          <input className='sb-ckb-supplier' onClick={(e) => {onClickCheckBoxSupplier(e)}} type="checkbox" id={"supplier" + index + 1} name= {"supplier" + index + 1} value={supplier}/>
           <label htmlFor = {"supplier" + index + 1} className='sb-supplier-item'> {supplier} </label>
       </li>
       })}
@@ -81,9 +87,9 @@ return <>
 }
 
 function GetProductsList(){
-  const jsonFileData = "src/assets/BookData/data.json";
+  const apiPath = "https://h5ltj4-8080.csb.app/books";
 
-  var products = fetch(jsonFileData)
+  var products = fetch(apiPath)
     .then(response => {
       if (!response.ok) {
         throw new Error(`Failed to fetch JSON: ${response.statusText}`);
@@ -94,5 +100,49 @@ function GetProductsList(){
   return products;
 }
 
+function onClickCategorySearch(e){
+  e.preventDefault();
+  const searchInput = document.querySelector("#input_value_search");
 
+  let urlSearch = window.location.href;
+  let urlParams = new URLSearchParams(window.location.search);
+
+  const arrayValues = ['value1', 'value2', 'value3'];
+  const serializedArray = JSON.stringify(arrayValues);
+
+  urlParams.set('searchCategory', serializedArray);
+
+  const newURL = urlSearch.split('?')[0] + '?' + urlParams.toString();
+
+  history.pushState(null, null, newURL);
+
+  searchInput.click();
+}
+
+function onClickCheckBoxSupplier(e){
+  const searchInput = document.querySelector("#input_value_search");
+  const listCheckBoxSupplier = document.querySelectorAll(".sb-ckb-supplier");
+  const listSupplierValue = [];
+
+  listCheckBoxSupplier.forEach(function(item){
+    if(item.checked){
+      listSupplierValue.push(item.value);
+    }
+  })
+
+  let urlSearch = window.location.href;
+  let urlParams = new URLSearchParams(window.location.search);
+
+  if(urlParams.get('searchSupplier') == null || urlParams.get('searchSupplier') == ''){
+    urlParams.delete('searchSupplier');
+  }
+
+  urlParams.set('searchSupplier', JSON.stringify(listSupplierValue));
+
+  const newURL = urlSearch.split('?')[0] + '?' + urlParams.toString();
+
+  history.pushState(null, null, newURL);
+
+  searchInput.click();
+}
 export default SideBar

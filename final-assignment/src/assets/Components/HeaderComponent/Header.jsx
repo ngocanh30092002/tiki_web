@@ -11,7 +11,7 @@ function Header(){
     <div className='flex flex-row gap-x-10 items-center bg-[#1BA8FF] px-[20px] py-[5px] md:bg-white'>
       <HeaderLogo className="hidden md:block"/>
       <HeaderMenu className="flex justify-center items-center md:hidden"/>
-      <HeaderSearch/>
+      <HeaderSearch />
       <HeaderControl className="hidden md:block"/>
       <HeaderCart className="block  md:hidden"/>
     </div>

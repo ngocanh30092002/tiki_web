@@ -1,6 +1,7 @@
 .main{
     background-color: #f5f5fa; 
     overflow: hidden;
+    padding-bottom: 20px;
 }
 
 .main > *{

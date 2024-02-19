@@ -1,26 +1,17 @@
 import React from 'react'
-import { useEffect, useState } from 'react';
+import StarRating from '../StarRatingComponent/StarRating';
 import './style.css';
+import { Link } from 'react-router-dom';
 
 const Products = (props) => {
-  const [products, setProducts] = useState([]);
-  useEffect(() => {
-    (async () => {
-      try {
-        const data = await GetProductsList();
-        setProducts(data);
-      } catch (error) {
-        alert('An error occurred:', error);
-      }
-    })();
-  }, [])
-
   return (
     <>
       <div className= {props.className}>
         <div className="list-products-wrapper grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-y-[10px] gap-x-[8px] px-[10px]">
-          {products.map(product =>{
-            return <ProductItem key={product.id} data = {product}/>
+          {props.data.map( product =>{
+            return <a href={`/detailproduct/${product.id}`} key={product.id}>
+              <ProductItem data={product}/>
+            </a>
           })}
         </div>
       </div>
@@ -38,11 +29,11 @@ function ProductItem({data}){
 }
 
 function ProductInfor({data}){
-  let rating_average = data.rating_average == 0 ? "" : data.rating_average
+  let rating_average = data.rating_average ?? 0
   let quantity_sold = data.quantity_sold == null ? "" : data.quantity_sold.text
 
   let price_discount = Math.floor(( data.original_price - data.current_seller.price ) * 100/ data.original_price);
-  
+
   return <>
     <div className='flex flex-col p-[10px]'>
       <div className='product-item__infor'>
@@ -52,7 +43,7 @@ function ProductInfor({data}){
 
         <div className='product-item__sell-infor'>
           <div className='product-item__rating-star'>
-            {rating_average}
+            {rating_average == 0 ? "" : <StarRating ratingNumber = {rating_average} content=''/>  }
           </div>
           <div className='product-item__number-sold'>
             {quantity_sold}
@@ -93,17 +84,5 @@ function ProductThumbnail({data}){
   </>
 }
 
-function GetProductsList(){
-  const jsonFileData = "src/assets/BookData/data.json";
 
-  var products = fetch(jsonFileData)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error(`Failed to fetch JSON: ${response.statusText}`);
-      }
-      return response.json();
-    })
-
-  return products;
-}
 export default Products
