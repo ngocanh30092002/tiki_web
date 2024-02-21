@@ -10,6 +10,7 @@ import './style.css';
 import { Route, Routes } from 'react-router-dom';
 
 const Main = () => {
+  const [searchProduct, setSearchProduct] = useState([]);
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -17,6 +18,7 @@ const Main = () => {
       try {
         const data = await GetProductsList();
         setProducts(data);
+        setSearchProduct(data);
       } catch (error) {
         alert('An error occurred:', error);
       }
@@ -33,7 +35,7 @@ const Main = () => {
           })}
         </Routes>
 
-        <input type='hidden' id="input_value_search" onClick={(e) =>{onClickSearchProduct(e, setProducts, products)}}/>
+        <input type='hidden' id="input_value_search" onClick={(e) =>{onClickSearchProduct(e, setProducts, products, searchProduct)}}/>
     </div>
   </>
 }
@@ -52,7 +54,7 @@ function MainListProducts(props){
 }
 
 function GetProductsList(){
-  const apiPath = "https://h5ltj4-8080.csb.app/books";
+  const apiPath = "https://86yfl7-8080.csb.app/books";
 
   var products = fetch(apiPath)
     .then(response => {
@@ -66,13 +68,17 @@ function GetProductsList(){
 }
 
 
-function onClickSearchProduct(event, setProducts, products){
+function onClickSearchProduct(event, setProducts, products, searchProduct) {
   var urlParams = new URLSearchParams(window.location.search);
+  const inputSearch = document.querySelector("#input-search-header-id");
 
   var searchValue = urlParams.get("searchValue") ?? "";
   var searchCategory = urlParams.get("searchCategory")?? "";
-  var searchSupplier = urlParams.get("searchSupplier")?? "";
+  var searchSupplier = urlParams.get("searchSupplier");
+  var searchSupplierArr = searchSupplier == "" || searchSupplier == null ? [] : JSON.parse(searchSupplier);
 
+  console.log("product");
+  console.log(products);
   let productFilter = [...products];
 
   if(searchValue !== null && searchValue !== ''){
@@ -80,6 +86,9 @@ function onClickSearchProduct(event, setProducts, products){
       let productName = product.name.toLowerCase();
       return productName.includes(searchValue.toLowerCase());
     })
+
+    console.log(productFilter);
+
   }
 
   if(searchCategory !== null && searchCategory !== ''){
@@ -90,7 +99,6 @@ function onClickSearchProduct(event, setProducts, products){
   }
 
 
-  console.log(searchSupplier);
 
   if(searchSupplier !== null && searchSupplier !== ''){
     productFilter = productFilter.filter((product) =>{
@@ -98,6 +106,10 @@ function onClickSearchProduct(event, setProducts, products){
       return searchSupplier.indexOf(supplierName) !== -1;
     })
   }
+  // if(productFilter.length == 0){
+  //   setProducts(searchProduct);
+  // }
+
   // let productFilter = [];
   // if(searchValue !== ""){
   //   productFilter = products.filter((product) => {
@@ -105,15 +117,9 @@ function onClickSearchProduct(event, setProducts, products){
   //     return productName.includes(searchValue);
   //   })
   // }
+  
   if(searchValue == "" && searchCategory == "" && searchSupplier.length == 0){
-    (async () => {
-      try {
-        const data = await GetProductsList();
-        setProducts(data);
-      } catch (error) {
-        alert('An error occurred:', error);
-      }
-    })();
+    setProducts([...searchProduct]);
   }
   else if(productFilter.length > 0) {
     setProducts(productFilter);
@@ -121,6 +127,7 @@ function onClickSearchProduct(event, setProducts, products){
   else{
     if(searchValue !== "" ){
       alert("There were no products found in the store");
+      inputSearch.value ='';
     }
     else if(searchCategory!== "" ){
       alert("There were no products found in the store");
@@ -131,14 +138,15 @@ function onClickSearchProduct(event, setProducts, products){
 
     history.pushState(null, null, window.location.href.split("?")[0]);
 
-    (async () => {
-      try {
-        const data = await GetProductsList();
-        setProducts(data);
-      } catch (error) {
-        alert('An error occurred:', error);
-      }
-    })();
+    // (async () => {
+    //   try {
+    //     const data = await GetProductsList();
+    //     setProducts(data);
+    //   } catch (error) {
+    //     alert('An error occurred:', error);
+    //   }
+    // })();
+    setProducts([...searchProduct]);
 
   }
 }

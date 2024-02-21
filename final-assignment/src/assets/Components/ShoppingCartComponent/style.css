@@ -1,0 +1,16 @@
+input[type="number"]::-webkit-outer-spin-button, 
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+
+.btn-increase-cart:hover{
+    opacity: 0.8;
+}
+.btn-decrease-cart:hover{
+    opacity: 0.8;
+}

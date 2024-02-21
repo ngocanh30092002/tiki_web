@@ -87,7 +87,7 @@ return <>
 }
 
 function GetProductsList(){
-  const apiPath = "https://h5ltj4-8080.csb.app/books";
+  const apiPath = "https://86yfl7-8080.csb.app/books";
 
   var products = fetch(apiPath)
     .then(response => {
@@ -107,10 +107,7 @@ function onClickCategorySearch(e){
   let urlSearch = window.location.href;
   let urlParams = new URLSearchParams(window.location.search);
 
-  const arrayValues = ['value1', 'value2', 'value3'];
-  const serializedArray = JSON.stringify(arrayValues);
-
-  urlParams.set('searchCategory', serializedArray);
+  urlParams.set("searchCategory", e.target.innerHTML);
 
   const newURL = urlSearch.split('?')[0] + '?' + urlParams.toString();
 
@@ -132,10 +129,6 @@ function onClickCheckBoxSupplier(e){
 
   let urlSearch = window.location.href;
   let urlParams = new URLSearchParams(window.location.search);
-
-  if(urlParams.get('searchSupplier') == null || urlParams.get('searchSupplier') == ''){
-    urlParams.delete('searchSupplier');
-  }
 
   urlParams.set('searchSupplier', JSON.stringify(listSupplierValue));
 
