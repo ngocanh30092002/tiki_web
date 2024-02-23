@@ -12,6 +12,7 @@ import { Route, Routes } from 'react-router-dom';
 const Main = () => {
   const [searchProduct, setSearchProduct] = useState([]);
   const [products, setProducts] = useState([]);
+  const [currentCart , setCurrentCart] = useState([]);
 
   useEffect(() => {
     (async () => {
@@ -31,7 +32,7 @@ const Main = () => {
           <Route path='/' element={<MainListProducts data={products}/>}/>
 
           {products.map(product => {
-            return <Route key={product.id} path={`/detailproduct/${product.id}`} element={<DetailProduct data={product}/>}/>  
+            return <Route key={product.id} path={`/detailproduct/${product.id}`} element={<DetailProduct data={product} onSetCurrentCart = {setCurrentCart} currentCart = {currentCart}/>}/>  
           })}
         </Routes>
 

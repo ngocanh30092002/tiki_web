@@ -34,12 +34,34 @@ const DetailProductBuyInfor = (props) => {
 
         <div className='pd-buy-infor__func-wrapper'>
           <button className="btn-buy btn-quantity-func"type='button'> Mua ngay </button>
-          <button className="btn-add-cart btn-quantity-func"type='button'> Thêm vào giỏ hàng </button>
+          <button className="btn-add-cart btn-quantity-func"type='button' onClick={(e) =>{onClickAddToCart(e, props)}}> Thêm vào giỏ hàng </button>
           <button className="btn-buy-first-pay-later btn-quantity-func"type='button'> Mua trước trả sau </button>
         </div>  
       </div>
     </div>   
   </>
+}
+
+function onClickAddToCart(e , props){
+  const inputQuantity = document.getElementById("input-quantity");
+  const totalMoney = document.getElementById("total-price-id");
+  props.data["quantityBuy"] = parseInt(inputQuantity.value);
+  props.data["totalMoney"] = parseFloat(totalMoney.innerHTML.replace(".",''));
+  
+  console.log(props.currentCart);
+  let item = props.currentCart.find(item => item.id == props.data.id);
+
+  if(item != null){
+    item.quantityBuy = item.quantityBuy + parseInt(inputQuantity.value);
+
+    let test =  props.currentCart.filter(product => product.id != item.id);
+    console.log(test);
+
+    props.onSetCurrentCart([...test, item]);
+  }
+  else{
+    props.onSetCurrentCart([...props.currentCart, props.data]);
+  }
 }
 
 function onClickDecreaseQuantity(e, price){

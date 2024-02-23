@@ -6,7 +6,7 @@ const HeaderLogo = (props) => {
       <a href={window.location.href.split("?")[0]}>
         <img 
           className='object-contain header-logo'
-          src = 'https://s3-alpha-sig.figma.com/img/0fc4/c1bd/682eccf8d6c5e3ed3e5df02dab272608?Expires=1708300800&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=gsaUEypJgaLt4Rm92q16YmLG1S5ddUqZR0EJdBjIGjqEmyqVp4GvAuA791IgNsoBlV1fKQcjtxL593T~JGg2xK8fPgCO7EENVKouz2qvgQOuW8QN4fRnPbvpyx4Z2iAnrBZwR5vtoBHhsJ3ou5Gk21Ar48Jb94XjSSbfH-3ZOXVjNGontki45lz63O7QwPnqLsj29V~-3jXjxvYzURURXo3Ue0dBfVNCuaEnHEeMTIMifNEZHCq0Bf3doLYukh2~IVhlIhKwLG-GDcRw0zcv7-m2AUzxAFM43d7pnChczj--ZfHNkwpnZmTQ8R53SNqImUJBO4jiGRI1DbjQXLvxRw__'
+          src = 'https://s3-alpha-sig.figma.com/img/0fc4/c1bd/682eccf8d6c5e3ed3e5df02dab272608?Expires=1709510400&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=mBaGYclduUoVeQ1sJ-Eo~GxzCUW5wL0UeUhTDPboU~uC6Vupbho9pLWUb7mX4lBGHgzWBjF8gKV-r-yLEycuNdV9g7AWSgrSkYWgI97ZGuXG7T-sQGhOGX5vTU-JahDB7J~DzSYw43K0hvh1iww8RHncnXhTfctM1ZwzXmQYCddCrfBDS-tmixrkVxuuUpcV2UhP2wHBAL9blAEzhG9uv3-7bB19mI3PSdhBFFLm-MoZgqmYO-iA6YjM4BXHRELEZedB6UffItoSdjyJCGx3TOGBImncpeJM73pviS5aVzbICF-UnBGPOa6KBaDWBFPh828ewKJjG0vAHsaazfB-zg__'
         />
       </a>
     </div>

@@ -11,7 +11,7 @@ function App() {
     <>
       <Header></Header>
       
-      {/* <Main></Main> */}
+      <Main></Main>
       <ShoppingCart/>
       <Footer></Footer>
     </>
