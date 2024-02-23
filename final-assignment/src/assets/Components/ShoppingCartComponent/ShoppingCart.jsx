@@ -1,75 +1,118 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './style.css'
 
 
-const ShoppingCart = () => {
+const ShoppingCart = (props) => {
+  
+  const [currentCart, setCurrentCart] = useState(()=>{
+    const listCurrentCart = localStorage.getItem("currentCart");
+
+    return JSON.parse(listCurrentCart);
+  })
+
+  useEffect(()=>{
+    onSetPriceInfor(currentCart);
+  },[])
+
+  console.log(currentCart);
   return <>
-   <section className="h-100 h-custom">
-      <div className="container h-100 py-5">
-        <div className="grid grid-cols-12">
-          <div className="table-responsive col-span-8 cart-infor-wrapper">
-            <table className="table">
-              <thead>
-                <tr>
-                  <th scope="col" className="h5">Giỏ hàng của bạn</th>
-                  <th scope="col" className='text-center'>Loại sản phẩm</th>
-                  <th scope="col" className='text-center'>Số lượng</th>
-                  <th scope="col" className='text-center'>Giá</th>
-                </tr>
-              </thead>
-              <tbody>
-                <ShoppingCartItem/>
-                <ShoppingCartItem/>
-              </tbody>
-            </table>
-          </div>
-          <div className="col-span-4 ml-[20px] " style={{borderRadius: '16px'}}>
-            <div className=" p-4" style={{border: "1px solid #cccccc", borderRadius: '10px'}}>
-              
-                <div className="d-flex justify-content-between" style={{fontWeight: '500'}}>
-                  <p className="mb-2">Subtotal</p>
-                  <p className="mb-2" id = "subtotal">23.49</p>
-                </div>
+    {
+      currentCart == null ?
+      <h1 className='flex shopping-cart-infor'>Không có sản phẩm nào trong giỏ hàng</h1> :
 
-                <div className="d-flex justify-content-between" style={{fontWeight: '500'}}>
-                  <p className="mb-0">Shipping</p>
-                  <p className="mb-0" id ="shippingPrice">20.000 đ</p>
-                </div>
-
-                <hr className="my-4"/>
-
-                <div className="d-flex justify-content-between mb-4" style={{fontWeight: '500'}}>
-                  <p className="mb-2">Total (tax included)</p>
-                  <p className="mb-2" id='total'>26.48</p>
-                </div>
-
-                <button type="button" className="btn btn-primary btn-block btn-lg flex justify-center " style={{backgroundColor: "#0d6efd", width: "100%", textAlign: "center"}}>
-                  <div className="d-flex justify-content-between">
-                    <span>Checkout</span>
+      <section className="h-100 h-custom">
+        <div className="container h-100 py-5">
+          <div className="grid grid-cols-12">
+            <div className="table-responsive col-span-8 cart-infor-wrapper">
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th scope="col" className="h5">Giỏ hàng của bạn</th>
+                    <th scope="col" className='text-center'>Loại sản phẩm</th>
+                    <th scope="col" className='text-center'>Số lượng</th>
+                    <th scope="col" className='text-center'>Giá</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {currentCart.map((item,index)=>{
+                    return <ShoppingCartItem data={item} key={index}/>
+                  })}
+                </tbody>
+              </table>
+            </div>
+            <div className="col-span-4 ml-[20px] " style={{borderRadius: '16px'}}>
+              <div className=" p-4" style={{border: "1px solid #cccccc", borderRadius: '10px'}}>
+                
+                  <div className="d-flex justify-content-between" style={{fontWeight: '500'}}>
+                    <p className="mb-2">Subtotal</p>
+                    <p className="mb-2" id = "subtotal">23.49</p>
                   </div>
-                </button>
+
+                  <div className="d-flex justify-content-between" style={{fontWeight: '500'}}>
+                    <p className="mb-0">Shipping</p>
+                    <p className="mb-0" id ="shippingPrice">20.000 đ</p>
+                  </div>
+
+                  <hr className="my-4"/>
+
+                  <div className="d-flex justify-content-between mb-4" style={{fontWeight: '500'}}>
+                    <p className="mb-2">Total (tax included)</p>
+                    <p className="mb-2" id='total'>26.48</p>
+                  </div>
+
+                  <button onClick={(e)=>{onCheckOutClick(e)}} type="button" className="btn btn-primary btn-block btn-lg flex justify-center " style={{backgroundColor: "#0d6efd", width: "100%", textAlign: "center"}}>
+                    <div className="d-flex justify-content-between">
+                      <span>Checkout</span>
+                    </div>
+                  </button>
+              </div>
             </div>
           </div>
-        </div>
-      </div>    
-    </section>
+        </div>    
+      </section>
+    }
   </>
 }
 
+function onSetPriceInfor(currentCart){
+  if(currentCart != null){
+    let totalSubMoney = 0;
+    const subtotal = document.getElementById("subtotal");
+    const total = document.getElementById("total");
+    const shippingPrice = document.getElementById("shippingPrice");
 
-function ShoppingCartItem(){
+    currentCart.forEach(function(item){
+      console.log(item.quantityBuy );
+      console.log(item.current_seller.price);
+      totalSubMoney += item.quantityBuy * item.current_seller.price;
+      console.log(totalSubMoney);
+    })
+
+    subtotal.innerHTML = numberWithCommas(Math.floor(totalSubMoney))+ " đ";
+    total.innerHTML = numberWithCommas(Math.floor(totalSubMoney+ parseInt(shippingPrice.innerHTML.replace(".","")))) + " đ";
+  }
+}
+
+
+function onCheckOutClick(e){
+  alert("Checkout was successful")
+  localStorage.clear();
+  window.location.reload();
+}
+
+function ShoppingCartItem({data}){
     return <>
     <tr>
         <th scope="row">
         <div className="d-flex align-items-center">
-            <img src="https://i.imgur.com/2DsA49b.webp" className="img-fluid rounded-3" style={{width: '120px'}} alt=""/>
+            <img src={data.images[0].medium_url} className="img-fluid rounded-3" style={{width: '120px'}} alt=""/>
             <div className="flex-column ms-4">
-            <p className="mb-2 min-w-[200px]">Thinking, Fast and Slow Daniel Kahneman</p>
+            <p className="mb-2 min-w-[200px]">{data.name}</p>
             </div>
         </div>
         </th>
         <td className="align-middle min-w-[150px] text-center">
-            <p className="mb-0" style={{fontWeight: '500'}}>Digital</p>
+            <p className="mb-0" style={{fontWeight: '500'}}>{data.categories.name}</p>
         </td>
         <td className="align-middle min-w-[150px]">
             <div className="d-flex flex-row justify-center">
@@ -81,7 +124,7 @@ function ShoppingCartItem(){
                 </svg>
                 </button>
 
-                <input id="quantity" min="0" name="quantity" type="number" value={1} readOnly="readOnly"
+                <input id="quantity" min="0" name="quantity" type="number" value={data.quantityBuy} readOnly="readOnly"
                     className="form-control form-control-sm input-shopping-cart" style={{width: '50px', textAlign: "center"}} />
 
                 <button className="btn btn-link px-2 btn-increase-cart"
@@ -92,10 +135,10 @@ function ShoppingCartItem(){
                     </svg>
                 </button>
             </div>
-            <div className='price-per-product hidden'>9.99</div>
+            <div className='price-per-product hidden'>{data.current_seller.price}</div>
         </td>
         <td className="align-middle min-w-[150px] text-center">
-            <p className="mb-0 totalPriceProduct" style={{fontWeight: '500'}}>9.99</p>
+            <p className="mb-0 totalPriceProduct" style={{fontWeight: '500'}}>{numberWithCommas(data.current_seller.price*data.quantityBuy)}</p>
         </td>
     </tr>
     </>

@@ -1,3 +1,4 @@
+import { stringify } from 'postcss';
 import React from 'react'
 
 const DetailProductBuyInfor = (props) => {
@@ -43,25 +44,57 @@ const DetailProductBuyInfor = (props) => {
 }
 
 function onClickAddToCart(e , props){
+  var currentCart = localStorage.getItem("currentCart");
   const inputQuantity = document.getElementById("input-quantity");
-  const totalMoney = document.getElementById("total-price-id");
-  props.data["quantityBuy"] = parseInt(inputQuantity.value);
-  props.data["totalMoney"] = parseFloat(totalMoney.innerHTML.replace(".",''));
-  
-  console.log(props.currentCart);
-  let item = props.currentCart.find(item => item.id == props.data.id);
 
-  if(item != null){
-    item.quantityBuy = item.quantityBuy + parseInt(inputQuantity.value);
+  const data = {...props.data, quantityBuy: parseInt(inputQuantity.value)}
 
-    let test =  props.currentCart.filter(product => product.id != item.id);
-    console.log(test);
+  if(currentCart == null){
+    let listCurrentCart = [data];
 
-    props.onSetCurrentCart([...test, item]);
+    localStorage.setItem("currentCart", JSON.stringify(listCurrentCart));
+
+    onSetForIconCart(1);
   }
   else{
-    props.onSetCurrentCart([...props.currentCart, props.data]);
+    const listCurrentCart = JSON.parse(currentCart);
+
+    var existProduct = listCurrentCart.find(item => item.id == data.id);
+    
+    if(existProduct != null){
+      existProduct.quantityBuy = existProduct.quantityBuy + parseInt(inputQuantity.value);
+
+      const listItemWithoutExistProduct = listCurrentCart.filter(product => product.id != existProduct.id);
+
+      const newListCurrentCart = [...listItemWithoutExistProduct, existProduct];
+
+      localStorage.setItem("currentCart", JSON.stringify(newListCurrentCart));
+
+      onSetForIconCart(listCurrentCart.length)
+    }
+    else{
+      localStorage.setItem("currentCart", JSON.stringify([...listCurrentCart, data]));
+
+      onSetForIconCart(listCurrentCart.length + 1)
+    }
+
+    
   }
+
+}
+
+function onSetForIconCart(number){
+  const cartIconElement = document.getElementById("control-icon-cart");
+
+  if(number >= 9){
+    localStorage.setItem("numberProducts", "9+")
+    cartIconElement.innerHTML = "9+"
+  }
+  else{
+    localStorage.setItem("numberProducts", number)
+    cartIconElement.innerHTML = number;
+  }
+  
 }
 
 function onClickDecreaseQuantity(e, price){

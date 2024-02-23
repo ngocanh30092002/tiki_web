@@ -17,7 +17,6 @@ const DetailProductContent = (props) =>{
 }
 
 function ProductDetailContent(props){
-  console.log(props.data);
   return <>
     <div className={props.className}>
       <div className="bg-white p-[20px] my-[20px] rounded-[8px]">

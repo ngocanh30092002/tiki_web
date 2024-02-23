@@ -14,7 +14,7 @@ const DetailProduct = (props) => {
     <div className='grid grid-cols-12 gap-[25px] xl:w-[1240px]  mx-auto mt-[20px]'>
         <DetailProductThumbnail className='col-span-12 md:col-span-12 xl:col-span-3' data={props.data}/>
         <DetailProductContent className='col-span-12 md:col-span-12 xl:col-span-6' data = {props.data}/>
-        <DetailProductBuyInfor className='col-span-12 md:col-span-12 xl:col-span-3' data = {props.data} onSetCurrentCart={props.onSetCurrentCart} currentCart={props.currentCart}/>
+        <DetailProductBuyInfor className='col-span-12 md:col-span-12 xl:col-span-3' data = {props.data}/>
     </div>
   </>
 }

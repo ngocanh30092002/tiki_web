@@ -1,18 +1,19 @@
 import React from 'react'
 import { useEffect, useState } from 'react';
+import { Route, Routes } from 'react-router-dom';
 import ProductFilter from './ProductFilterComponent/ProductFilter';
 import NavigationPath from './NavigationPathComponent/NavigationPath';
 import SideBar from './SideBarComponent/SideBar';
 import Products from './ProductsComponent/Products';
 import Paging from './PagingComponent/Paging';
 import DetailProduct from '../DetailProductComponent/DetailProduct';
+import ShoppingCart from "../ShoppingCartComponent/ShoppingCart"
 import './style.css';
-import { Route, Routes } from 'react-router-dom';
+
 
 const Main = () => {
   const [searchProduct, setSearchProduct] = useState([]);
   const [products, setProducts] = useState([]);
-  const [currentCart , setCurrentCart] = useState([]);
 
   useEffect(() => {
     (async () => {
@@ -32,8 +33,11 @@ const Main = () => {
           <Route path='/' element={<MainListProducts data={products}/>}/>
 
           {products.map(product => {
-            return <Route key={product.id} path={`/detailproduct/${product.id}`} element={<DetailProduct data={product} onSetCurrentCart = {setCurrentCart} currentCart = {currentCart}/>}/>  
+            return <Route key={product.id} path={`/detailproduct/${product.id}`} element={<DetailProduct data={product}/>}/>  
           })}
+
+          <Route path='/shopping-cart' element= {<ShoppingCart/>}></Route>
+        
         </Routes>
 
         <input type='hidden' id="input_value_search" onClick={(e) =>{onClickSearchProduct(e, setProducts, products, searchProduct)}}/>
